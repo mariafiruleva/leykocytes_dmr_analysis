@@ -204,7 +204,7 @@ annot$IlmnID <- as.character(annot$IlmnID)
 annot.betas$Coordinate_37 <- as.numeric(levels(annot.betas$Coordinate_37))[annot.betas$Coordinate_37]
 annot.betas$IlmnID <- as.character(annot.betas$IlmnID)
 colnames(betas) <- gsub( "_", "", as.character(colnames(betas)))
-colnames(betas)[26] <- "X463lym"
+colnames(betas)[26] <- "X6468lym"
 
 ######## A-clustering ##########
 
