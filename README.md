@@ -9,19 +9,19 @@ Oleg Sergeev, Yulia Medvedeva, Julia Kornienko
 
 The Russian Children’s Study is a prospective cohort of 516 boys who were enrolled at 8–9 years of age and provided semen samples at 18–19 years of age. RRBS of sperm was conducted to identify the methylation level of CpG dinucleotides. At the moment of enrollment into the study, the TCDD dioxine (which is one of the most harmful endocrine disrupting chemicals) concentration in the blood of each boy was measured for further longitudinal study of its influence on the reproductive health. Moreover, each boy visited the clinic biennially - for blood sampling; annually - for urine sampling, follow up of growth and puberty and interviewing => 20 000+ sample aliquots and 1000+ analyzing parameters were collected in total for further analysis.
 
-##### What is already known?
+### What is already known?
 - 52 differentially methylated regions (DMRs) in sperm were identified that distinguished lowest and highest peripubertal serum TCDD concentrations (RCS, Pilsner et al., 2018)
 - Peripubertal exposure to toxicants (like dioxins) and smoking affects the methylation of sperm DNA at the age of 18 (last year project, Y.Kornienko)
 
-##### What is needed to be known?
+### What is needed to be known?
 - How does smoking influence the DNA methylation in peripheral blood leukocytes at the age of 18? 
 - How are associated epigenome changes of sperm and leukocytes in the same study participants?
 
-##### Aims of the project:
+### Aims of the project:
 - Analysis of smoking influence on the DNA methylation level of peripheral blood leukocytes at the age of 18
 - Comparison of DNA methylation level in sperm (results of last year project, Julia Kornienko) and leukocytes in the same study participants
 
-##### What were the data to analyse:
+### What were the data to analyse:
 - 36 samples: 11 smoking and 25 don’t
 - Data regarding lifestyle habits of each of 36 chosen participants
 - Methylation levels of 2277623 CpGs present in at least one of 36 samples
@@ -29,13 +29,13 @@ The Russian Children’s Study is a prospective cohort of 516 boys who were enro
 On the histogram the distribution of samples by the number of cigarettes smoked is presented
 ![GitHub Logo](/plots/smoke_last6months.png)
 
-##### Scripts Description
+### Scripts Description
 1. data_preparation.ipynb - script for data preprocessing 
 2. visualization.ipynb - script for drawing plots presented here
 3. Aclust_GEE.R - script for A-clustering and GEE analysis
 4. DMRcate_RRBS_leuk.R - script for DMRcate analysis
 
-##### Brief summary of the results:
+### Brief summary of the results:
 1. Similar methylation distribution revealed in leukocytes and sperms - for dataset with CpGs presented at least sample
 2. Methylation distribution is different in sperms and leukocytes in dataset used for A-clustering - CpGs presented in all samples
 3. Comparison of CpGs distribution across samples shows similar distribution in sperms and leukocytes
@@ -45,7 +45,7 @@ On the histogram the distribution of samples by the number of cigarettes smoked 
 7. DMRcate package (R) were used for search of DMR by smoking. Factor - smoking last 6 months in binary classification (yes/no). 34 significant DMRs revealed, of them 19 overlap with at least one promoter (reference - hg38), 145 significant CpGs. 
 8. Genes associated with significant CpGs encode pseudogenes, lincRNAs, antisense RNAs, zinc fingers, miRNA, regulatory elements, proteins of cell adhesion, amino-acid transporter.
 
-##### Detailed description of results:
+### Detailed description of results:
 *Samples selection:*
 - 51 out of 516 samples were chosen by the following criterias: 
 - Prepubertal TCDD exposure at 8-9 years old
