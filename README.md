@@ -7,11 +7,11 @@ Oleg Sergeev, Yulia Medvedeva, Julia Kornienko
 
 # Project Description
 
-The Russian Children’s Study is a prospective cohort of 516 boys who were enrolled at 8–9 years of age and provided semen samples at 18–19 years of age. RRBS of sperm was conducted to identify the methylation level of CpG dinucleotides. At the moment of enrollment into the study, the TCDD dioxine (which is one of the most harmful endocrine disrupting chemicals) concentration in the blood of each boy was measured for further longitudinal study of its influence on the reproductive health. Moreover, each boy visited the clinic biennially - for blood sampling; annually - for urine sampling, follow up of growth and puberty and interviewing => 20 000+ sample aliquots and 1000+ analyzing parameters were collected in total for further analysis.
+The Russian Children’s Study is a prospective cohort of 516 boys who were enrolled at 8–9 years of age and provided semen samples at 18–19 years of age. RRBS of sperm was conducted to identify the methylation level of CpG dinucleotides. At the moment of enrollment into the study, the blood level of 2,3,7,8-Tetrachlorodibenzodioxin (TCDD), most toxic dioxin congener and one of the most harmful endocrine disrupting chemical, was measured in boys for further longitudinal study of its influence on the reproductive health. Subjects visited the clinic biennially - for blood sampling; annually - for urine sampling, follow up of growth and puberty and interviewing => 20 000+ sample aliquots and 1000+ analyzing parameters were collected in total for further analysis.
 
 ### What is already known?
 - 52 differentially methylated regions (DMRs) in sperm were identified that distinguished lowest and highest peripubertal serum TCDD concentrations (RCS, Pilsner et al., 2018)
-- Peripubertal exposure to toxicants (like dioxins) and smoking affects the methylation of sperm DNA at the age of 18 (last year project, Y.Kornienko)
+- Peripubertal exposure to toxicants (like dioxins) and smoking affects the methylation of sperm DNA at the age of 18 (last year project, J.Kornienko)
 
 ### What is needed to be known?
 - How does smoking influence the DNA methylation in peripheral blood leukocytes at the age of 18? 
