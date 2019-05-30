@@ -26,6 +26,9 @@ The Russian Children’s Study is a prospective cohort of 516 boys who were enro
 - Data regarding lifestyle habits of each of 36 chosen participants
 - Methylation levels of 2277623 CpGs present in at least one of 36 samples
 
+On the histogram the distribution of samples by the number of cigarettes smoked is presented
+![GitHub Logo](/plots/smoke_last6months.png)
+
 ##### Scripts Description
 1. data_preparation.ipynb - script for data preprocessing 
 2. visualization.ipynb - script for drawing plots presented here
@@ -51,7 +54,7 @@ The Russian Children’s Study is a prospective cohort of 516 boys who were enro
 - Buffy coat samples at 18-19 years old closest to date of semen samplingю Buffy coat samples – source of leukocyte libraries.
 
 To start with, 10 IDs with either the highest or the lowest TCDD concentration were selected. Then were selected one ID with the highest semen quality and one with the lowest. Later, 39 more IDs were chosen by random selection 13 IDs belonging to each tercile in terms of TCDD concentration. Therefore the data set of 51 samples was created. 
-45 leukocyte libraries were sequenced. 4 samples were excluded because of low quality. Then additionally 5 samples were excluded because of coverage less than 10. Finally, 36 samples with satisfactory sequencing quality were selected for this project .
+45 leukocyte libraries were sequenced. 4 samples were excluded because of low quality. Then additionally 5 samples were excluded because of coverage less than 10. Finally, 36 samples with satisfactory sequencing quality were selected for this project.
 
 **_Data preprocessing:_** 
 
@@ -61,11 +64,20 @@ From the file containing information regarding all CpGs for 41 samples (with CpG
 
 Next, we made A-clustering and GEE regression using R packages “Aclust” and “gee”. This algorithm allows to detect sets of neighboring CpGs sites that are correlated with each other. With this approach we identified 217 A-clusters, from them 77 were significant (p-value < 0.05). But this approach has a significant drawback. Because of this algorithm works with information presented in all samples (without any NAs), we needed to restrict data from 2277623 to 19466 CpGs. So, a lot of important information could have been lost. 
 
+On the histogram distribution of number of CpGs per cluster is presented 
+![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
+
 Thus, another approach were suggested.  
 
 _**DMRcate:**_
 
 DMRcate - R package for search of DMRs associated with exposure to a factor. In our case, we used smoking in binary classification (smoke or not) to find DMRs associated with smoking influence. 145 significant CpGs and 34 significant DMRs (p-value < 0.05) were found in our data. From them 19 DMRs overlap with at least one promoter (reference - hg38). We found 23 genes associated with significant DMRs. These genes are associated with antisense RNAs, lincRNAs, miRNA, pseudogenes, zinc fingers, transcriptional factor, spliceosome, cell adhesion and migration, kinase, metalloprotease, electron transport chain and amino-acid transporter. 
+
+On the histogram distribution of DMRs per chromosome is presented
+![GitHub Logo](/plots/dmr_per_chromosome.png)
+
+Here genes associated with significant DMRs are presented 
+![GitHub Logo](/plots/genes.jpg)
 
 _**Comparison with sperms**_ (last year project - Julia Kornienko):
 
@@ -82,6 +94,12 @@ _**Comparison with sperms**_ (last year project - Julia Kornienko):
 - Comparison of CpGs distribution across sample. In both type of cells we can see geometric distribution. Most often the CpGs is found in one sample, 1.5 times less in two samples and etc
 
 ![GitHub Logo](/plots/number_samples.png)
-![GitHub yukornienko/mediation_analysis](Figure4.png)
+![GitHub Logo](/plots/sperms_number_samples.png)
+
+![GitHub Logo](/plots/max_min.png)
+![GitHub Logo](/plots/sperms_max_min.png)
 
 - A-clustering+GEE approach comparison. In general, we see similar distribution of number of CpGs in cluster. In leukocytes we found 217 clusters, in sperms - 874. Number of significant clusters (p-value < 0.05) in leukocytes 77, in sperms - 136
+
+![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
+![GitHub Logo](/plots/Clusters_dist_sperm.png)
