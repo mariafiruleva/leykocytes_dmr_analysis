@@ -70,8 +70,18 @@ DMRcate - R package for search of DMRs associated with exposure to a factor. In 
 _**Comparison with sperms**_ (last year project - Julia Kornienko):
 
 - Comparison of methylation distribution for datasets with methylation level for CpGs presented in at least one sample. We can see similar methylation distribution - the most of CpGs have very low methylation level, and some CpGs have high methylation level
+
 ![GitHub Logo](/plots/violinplot_leuk_all_CpGs.png)
+![GitHub Logo](/plots/violinplot_sperm_all_CpGs.png)
 
 - Comparison of methylation distribution for dataset with methylation level for CpGs presented in all samples. Here we can see different distribution. In sperms the most of CpGs have very low level of methylation and some CpGs with high methylation, but in leukocytes vise versa. We suppose, the reason is that global demethylation occurs in sex cells
+
+![GitHub Logo](/plots/violinplot_leuk_dataset_for_Aclust.png)
+![GitHub Logo](/plots/violinplot_sperms_dataset_for_Aclust.png)
+
 - Comparison of CpGs distribution across sample. In both type of cells we can see geometric distribution. Most often the CpGs is found in one sample, 1.5 times less in two samples and etc
+
+![GitHub Logo](/plots/number_samples.png)
+![GitHub yukornienko/mediation_analysis](Figure4.png)
+
 - A-clustering+GEE approach comparison. In general, we see similar distribution of number of CpGs in cluster. In leukocytes we found 217 clusters, in sperms - 874. Number of significant clusters (p-value < 0.05) in leukocytes 77, in sperms - 136
