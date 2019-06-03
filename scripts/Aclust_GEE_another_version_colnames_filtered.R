@@ -1,5 +1,8 @@
+#clear environment
+
 rm(list=ls())
 
+#load libraries
 source("http://bioconductor.org/biocLite.R")
 biocLite("BiocUpgrade")
 
@@ -7,6 +10,7 @@ library(devtools)
 library('Aclust') 
 library("gee")
 library(stringr)
+library(dplyr)
 
 ##########################################################################
 
@@ -23,8 +27,8 @@ GEE.clusters <- function(betas, clusters.list, exposure, id, covariates = NULL, 
   
   require(geepack)
   
-  n.sites <- unlist(lapply(clusters.list, function(x) return(length(x))))
-  inds.rm <- which(n.sites < minimum.cluster.size)
+  n.sites <- unlist(lapply(clusters.list, function(x) return(length(x)))) #save length of each cluster
+  inds.rm <- which(n.sites < minimum.cluster.size) 
   
   if (length(inds.rm) > 0) clusters.list <- clusters.list[-inds.rm]
   
@@ -180,57 +184,65 @@ GEE.clusters <- function(betas, clusters.list, exposure, id, covariates = NULL, 
 ####################################################################
 
 ## Analysis for all CpGs (present everywhere in the 1st batch)
-setwd("Files_and_code")
-betas <- read.csv("all_cpgs.10x_leukocytes_everywhere_n_=36.txt", sep = "\t", header = T)
-test <- read.csv("~/Bioinformatics/Spring_Project/CpGs_n_=10_max_min_=20.tsv", sep='\t')
-str(betas)
-str(test)
+
+#read matrix with B-values
+betas <- read.csv("~/Bioinformatics/Spring_Project/A-clustering/Files_and_code/all_cpgs.10x_leukocytes_everywhere_n_=36.txt", sep = "\t", header = T)
+
+#data preparation
+#split chrN:coord (betas$X) to data frame with 2 columns: V1 is chr, V2 is coordinate
 splitted <- as.data.frame(str_split_fixed(betas$X, ":", n = 2))
-betas$CHR <- splitted$V1
-betas$Coordinate_37 <- splitted$V2
-annot <- betas[,c(38,39)]
-annot$IlmnID <- betas$X
-rownames(betas) <- betas$X
+betas$CHR <- splitted$V1 #add chr to data
+betas$Coordinate_37 <- splitted$V2 #add coordinate of CpG to data
+annot <- select(betas, CHR, Coordinate_37)
+annot$IlmnID <- betas$X #add column with chrN:coord for each site
+rownames(betas) <- betas$X 
 betas$X <- NULL
 betas$CHR <-NULL
 betas$Coordinate_37 <- NULL
+
+#data filtration
+#filter CpG sites with low cov
 rows_for_filtration <- rownames(rbind(betas[rowSums(betas) <= 0,], betas[rowSums(betas) == ncol(betas)*100,]))
 betas <- betas[rowSums(betas) > 0,]
 betas <- betas[rowSums(betas) < ncol(betas)*100,]
-annot <- annot %>% filter(!IlmnID %in% c(rows_for_filtration))
+annot <- annot %>% filter(!IlmnID %in% c(rows_for_filtration)) #nrow(annot) must be == nrow(betas)
+
+#specify formats and remove errors from column names
 betas <- betas/100
-annot.betas <- annot[annot$IlmnID %in% rownames(betas),]
-annot.betas <- annot
-annot.betas <- annot.betas
 annot$Coordinate_37 <- as.numeric(levels(annot$Coordinate_37))[annot$Coordinate_37]
 annot$IlmnID <- as.character(annot$IlmnID)
-annot.betas$Coordinate_37 <- as.numeric(levels(annot.betas$Coordinate_37))[annot.betas$Coordinate_37]
-annot.betas$IlmnID <- as.character(annot.betas$IlmnID)
 colnames(betas) <- gsub( "_", "", as.character(colnames(betas)))
-colnames(betas)[26] <- "X463lym"
+colnames(betas) <- gsub( "limf", "lym", as.character(colnames(betas)))
 
 ######## A-clustering ##########
 
-chroms <- unique(annot.betas$CHR)
-chroms <- as.character(chroms[order(as.numeric(as.character(chroms)))])
+chroms <- unique(annot$CHR) #extract unique chromosomes
+chroms <- as.character(chroms[order(as.numeric(as.character(chroms)))]) #result is char vector of sorted chrs
+#prepare lists with element corresponds to each chr
 betas.by.chrom <- vector(mode = "list", length = length(chroms))
 sites.by.chrom <- vector(mode = "list", length = length(chroms))
 names(betas.by.chrom) <- names(sites.by.chrom) <- chroms
 
+
+#fill info about CpG sites for each chr
 for (i in 1:length(chroms)) {
-  cpg.chrom <- as.character(annot.betas[annot.betas$CHR == chroms[i],]$IlmnID)
+  cpg.chrom <- as.character(annot[annot$CHR == chroms[i],]$IlmnID)
   betas.by.chrom[[i]] <- as.matrix(betas[cpg.chrom, ])
   if (ncol(betas.by.chrom[[i]]) == 1) {
     betas.by.chrom[[i]] <- t(betas.by.chrom[[i]])
     rownames(betas.by.chrom[[i]]) <- cpg.chrom
   }
-  sites.by.chrom[[i]] <- annot.betas[annot.betas$CHR == chroms[i], ][,c(1:3)]
+  sites.by.chrom[[i]] <- annot[annot$CHR == chroms[i], ][,c(1:3)]
 }
 
-chrom.list = list(betas.by.chrom = betas.by.chrom, sites.locations.by.chrom = sites.by.chrom)
+#betas.by.chrom is the list, each element is a list with 2 dims: forst dim is site coord (chrN:coord) and second is sample name
+#sites.by.chrom is the list, each element is a df with 3 cols: 1 - chr, 2 - coord, 3 - site coord (chrN:coord)
+
+#prepare new lists for A-clustering
+chrom.list <- list(betas.by.chrom = betas.by.chrom, sites.locations.by.chrom = sites.by.chrom)
 clusters.by.chrom <- vector(mode = "list", length = length(chrom.list[[1]]))
 
-
+#clusterize all sites. exact info about algorithm in original paper for A-clustering package
 for (i in 1:length(chrom.list[[1]])) {
   betas.temp <- chrom.list[[1]][[i]]
   locations.temp <- chrom.list[[2]][[i]]
@@ -242,8 +254,7 @@ for (i in 1:length(chrom.list[[1]])) {
     clusters.all <- clusters.by.chrom[[1]]
   else clusters.all <- c(clusters.all, clusters.by.chrom[[i]])
 }
-clusters.list.1st_batch = clusters.all
-
+clusters.list.1st_batch <- clusters.all
 max_1st <- 2
 clusters.list.1st_batch_ <- list()
 for (i in 1:length(clusters.all)) {
@@ -256,33 +267,43 @@ for (i in 1:length(clusters.all)) {
   }
 }
 
+#clusters.list.1st_batch_ is a list with all clusters. one element is a cluster (char vector) with CpGs sites as elements
 
+#save results
 library(stringi)
 res <- as.data.frame(t(stri_list2matrix(clusters.list.1st_batch_)))
 write.csv(res, "Clusters.csv")
 
 ############GEE bivariates (expositions only)#############
+#GEE performed using one predictor: smoke / don't smoke
 
+#read annotation data (contain info about sample name, predictor, additional info)
 my_exp_and_cov <- read.csv("smoking_last6months.csv")
+#read sample names
 list_36_samples <- read.csv("list_36_samples.txt", stringsAsFactors = F, header = F)
-my_exp_and_cov <- my_exp_and_cov[,-c(1,3)]
-my_exp_and_cov$ID <- paste0(my_exp_and_cov$ID, "lym")
+my_exp_and_cov <- my_exp_and_cov[,-c(1,3)] #first three column is row number, ID and duplicate of ID
+my_exp_and_cov$ID <- paste0(my_exp_and_cov$ID, "lym") #now ID column corresponds to sample ID
 my_exp_and_cov <- my_exp_and_cov[my_exp_and_cov$ID %in% list_36_samples$V1,]
 my_exp_and_cov$exp_id <- sub("^", "X", my_exp_and_cov$ID)
 my_exp_and_cov <- my_exp_and_cov[match(colnames(betas), my_exp_and_cov$exp_id),]
 identical(colnames(betas), my_exp_and_cov$exp_id) ##must be TRUE before proceeding to next stage
 
 #for clusters
-exposure <- my_exp_and_cov$smoking_last6months
+exposure <- my_exp_and_cov$smoking_last6months #save predictor info to global var
 
+#build GEE model
 GEE.results.clusters <- GEE.clusters(betas, clusters.list.1st_batch, exposure, id = colnames(betas), working.cor = "ex")
 GEE_results_smoking_last6months <- GEE.results.clusters
+
+#adjust p-value
 GEE_results_smoking_last6months$exposure_padjusted <- p.adjust(GEE_results_smoking_last6months$exposure_pvalue, "BH")
 
+#get info about each cluster
 GEE_results_last6months_sig <- subset(GEE_results_smoking_last6months, exposure_padjusted <= 0.05)
 GEE_results_last6months_nan <- GEE_results_smoking_last6months[is.na(GEE_results_smoking_last6months$exposure_pvalue) == T,]
 GEE_results_last6months_zero <- GEE_results_smoking_last6months[GEE_results_smoking_last6months$exposure_pvalue == 0,]
 
+#save files
 fileName <- paste("./", "last6months", "_GEEclusters_Bvalues.tsv", sep="")
 write.table(GEE_results_smoking_last6months,file=fileName,col.names=TRUE,row.names=F,sep="\t")
 fileName <- paste("./", "last6months", "_GEEclusters_Bvalues_sig.tsv", sep="")
