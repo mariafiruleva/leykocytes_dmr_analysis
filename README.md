@@ -84,8 +84,12 @@ _**Comparison with sperms**_ (last year project - Julia Kornienko):
 
 Next, we made A-clustering and GEE regression using R packages “Aclust” and “gee”. This algorithm allows to detect sets of neighboring CpGs sites that are correlated with each other. With this approach we identified 217 A-clusters, from them 77 were significant (p-value < 0.05). But this approach has a significant drawback. Because of this algorithm works with information presented in all samples (without any NAs), we needed to restrict data from 2277623 to 19466 CpGs. So, a lot of important information could have been lost. 
 
-On the histogram distribution of number of CpGs per cluster is presented 
+- A-clustering+GEE approach comparison. In general, we see similar distribution of number of CpGs in cluster. In leukocytes we found 217 clusters, in sperms - 874. Number of significant clusters (p-value < 0.05) in leukocytes 77, in sperms - 136
+
 ![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
+![GitHub Logo](/plots/Clusters_dist_sperm.png)
+
+On the histogram distribution of number of CpGs per cluster is presented 
 
 Thus, another approach were suggested.  
 
@@ -99,7 +103,5 @@ On the histogram distribution of DMRs per chromosome is presented
 Here genes associated with significant DMRs are presented 
 ![GitHub Logo](/plots/genes.jpg)
 
-- A-clustering+GEE approach comparison. In general, we see similar distribution of number of CpGs in cluster. In leukocytes we found 217 clusters, in sperms - 874. Number of significant clusters (p-value < 0.05) in leukocytes 77, in sperms - 136
-
-![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
-![GitHub Logo](/plots/Clusters_dist_sperm.png)
+### Summary
+In course of the project, we analyzed the data from reduced representation bisulfite sequencing of participants in the Russian Children's Study longitudinal project. Various approaches to statistics interpretation of data were applied, in particular, the use of A-clustering algorithm and GEE and the DMRcate software package. In the future, it will be interesting to compare the results obtained in the previous spring project, devoted to the analysis of RRBS data from spermatozoids, and the results of our project.
