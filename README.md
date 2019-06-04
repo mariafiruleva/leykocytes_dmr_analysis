@@ -60,25 +60,6 @@ To start with, 10 IDs with either the highest or the lowest TCDD concentration w
 
 From the file containing information regarding all CpGs for 41 samples (with CpGs coverage >= 10x) we extracted methylation levels for the selected 36 samples. So, we got dataset with methylation level of 2277623 CpGs for 36 samples (dataset with information of CpGs presented in at least one sample). Then we prepared dataset for A-clustering algorithm (it works with methylation levels of CpGs presented in all samples). So, for A-clustering+GEE approach we had dataset with methylation level of 19466 CpGs. 
 
-**_A-clustering+GEE:_**
-
-Next, we made A-clustering and GEE regression using R packages “Aclust” and “gee”. This algorithm allows to detect sets of neighboring CpGs sites that are correlated with each other. With this approach we identified 217 A-clusters, from them 77 were significant (p-value < 0.05). But this approach has a significant drawback. Because of this algorithm works with information presented in all samples (without any NAs), we needed to restrict data from 2277623 to 19466 CpGs. So, a lot of important information could have been lost. 
-
-On the histogram distribution of number of CpGs per cluster is presented 
-![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
-
-Thus, another approach were suggested.  
-
-_**DMRcate:**_
-
-DMRcate - R package for search of DMRs associated with exposure to a factor. In our case, we used smoking in binary classification (smoke or not) to find DMRs associated with smoking influence. 145 significant CpGs and 34 significant DMRs (p-value < 0.05) were found in our data. From them 19 DMRs overlap with at least one promoter (reference - hg38). We found 23 genes associated with significant DMRs. These genes are associated with antisense RNAs, lincRNAs, miRNA, pseudogenes, zinc fingers, transcriptional factor, spliceosome, cell adhesion and migration, kinase, metalloprotease, electron transport chain and amino-acid transporter. 
-
-On the histogram distribution of DMRs per chromosome is presented
-![GitHub Logo](/plots/dmr_per_chromosome.png)
-
-Here genes associated with significant DMRs are presented 
-![GitHub Logo](/plots/genes.jpg)
-
 _**Comparison with sperms**_ (last year project - Julia Kornienko):
 
 - Comparison of methylation distribution for datasets with methylation level for CpGs presented in at least one sample. We can see similar methylation distribution - the most of CpGs have very low methylation level, and some CpGs have high methylation level
@@ -98,6 +79,25 @@ _**Comparison with sperms**_ (last year project - Julia Kornienko):
 
 ![GitHub Logo](/plots/max_min.png)
 ![GitHub Logo](/plots/sperms_max_min.png)
+
+**_A-clustering+GEE:_**
+
+Next, we made A-clustering and GEE regression using R packages “Aclust” and “gee”. This algorithm allows to detect sets of neighboring CpGs sites that are correlated with each other. With this approach we identified 217 A-clusters, from them 77 were significant (p-value < 0.05). But this approach has a significant drawback. Because of this algorithm works with information presented in all samples (without any NAs), we needed to restrict data from 2277623 to 19466 CpGs. So, a lot of important information could have been lost. 
+
+On the histogram distribution of number of CpGs per cluster is presented 
+![GitHub Logo](/plots/Clusters_dist_leykocytes.png)
+
+Thus, another approach were suggested.  
+
+_**DMRcate:**_
+
+DMRcate - R package for search of DMRs associated with exposure to a factor. In our case, we used smoking in binary classification (smoke or not) to find DMRs associated with smoking influence. 145 significant CpGs and 34 significant DMRs (p-value < 0.05) were found in our data. From them 19 DMRs overlap with at least one promoter (reference - hg38). We found 23 genes associated with significant DMRs. These genes are associated with antisense RNAs, lincRNAs, miRNA, pseudogenes, zinc fingers, transcriptional factor, spliceosome, cell adhesion and migration, kinase, metalloprotease, electron transport chain and amino-acid transporter. 
+
+On the histogram distribution of DMRs per chromosome is presented
+![GitHub Logo](/plots/dmr_per_chromosome.png)
+
+Here genes associated with significant DMRs are presented 
+![GitHub Logo](/plots/genes.jpg)
 
 - A-clustering+GEE approach comparison. In general, we see similar distribution of number of CpGs in cluster. In leukocytes we found 217 clusters, in sperms - 874. Number of significant clusters (p-value < 0.05) in leukocytes 77, in sperms - 136
 
